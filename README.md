@@ -35,6 +35,8 @@
 8. 数据输入形式为交互式运行，类似于shell。
 
 ## 代码测试
+测试数据1
 ![test1](https://github.com/aaronlinv/learn-programming/blob/master/demo1.png)
+测试数据2
 ![test2](https://github.com/aaronlinv/learn-programming/blob/master/demo2.png)
 作业地址：[第一次编程作业](https://edu.cnblogs.com/campus/fzzcxy/SE/homework/10283)
