@@ -34,4 +34,7 @@
 7. 不能使用eval函数动态执行代码，或调用系统指令。
 8. 数据输入形式为交互式运行，类似于shell。
 
+## 代码测试
+![test1](https://github.com/aaronlinv/learn-programming/blob/master/demo1.png)
+![test2](https://github.com/aaronlinv/learn-programming/blob/master/demo2.png)
 作业地址：[第一次编程作业](https://edu.cnblogs.com/campus/fzzcxy/SE/homework/10283)
