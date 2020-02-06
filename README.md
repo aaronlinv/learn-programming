@@ -36,7 +36,11 @@
 
 ## 代码测试
 测试数据1
-![test1](https://github.com/aaronlinv/learn-programming/blob/master/demo1.png)
+![test1](https://github.com/aaronlinv/learn-programming/blob/master/test1.png)
 测试数据2
-![test2](https://github.com/aaronlinv/learn-programming/blob/master/demo2.png)
+![test2](https://github.com/aaronlinv/learn-programming/blob/master/test2.png)
+测试数据3
+![test3](https://github.com/aaronlinv/learn-programming/blob/master/test3.png)
+测试数据4
+![test4](https://github.com/aaronlinv/learn-programming/blob/master/test4.png)
 作业地址：[第一次编程作业](https://edu.cnblogs.com/campus/fzzcxy/SE/homework/10283)
