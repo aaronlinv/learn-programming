@@ -30,12 +30,7 @@ public class Utils {
 				map.put(split[1], num);
 				break;
 			case "看看":
-				if (split.length == 1) {
-					System.out.println();// 仅输入"看看" 输出空行
-
-				} else {
 					Utils.printOut(str, map);
-				}
 				break;
 			case "如果":
 				Utils.ternaryOperator(str, map);
