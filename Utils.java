@@ -24,11 +24,11 @@ public class Utils {
 			switch (keyword) {
 			case "整数":
 				// System.out.println(map.get("钱包"));// 不存在返回null
-				int num = Utils.assignInt(split);
+				int num = Utils.assignInt(str);
 				map.put(split[1], num);
 				break;
 			case "看看":
-				Utils.printOut(split, map);
+				Utils.printOut(str, map);
 				break;
 			case "如果":
 				Utils.ternaryOperator(str, map);
@@ -44,8 +44,8 @@ public class Utils {
 	 * @param array
 	 * @return
 	 */
-	public static int assignInt(String[] array) {
-		// 先考虑一位情况
+	public static int assignInt(String str) {
+		String[] array = str.trim().split(" ");
 		return toNum(array[3]);
 	}
 
@@ -54,8 +54,8 @@ public class Utils {
 	 * @param array
 	 * @param map
 	 */
-	public static void printOut(String[] array, Map<String, Integer> map) {
-
+	public static void printOut(String str, Map<String, Integer> map) {
+		String[] array = str.trim().split(" ");
 		String printStr = array[1];
 		if (printStr.contains("“") && printStr.contains("”")) {
 			System.out.println(printStr.replace("“", "").replace("”", ""));
@@ -262,29 +262,50 @@ public class Utils {
 	 */
 	public static void manipulateNum(String str, Map<String, Integer> map) {
 		String[] strArray = str.trim().split(" ");
-		String varStr = strArray[0];
+		String varStr = strArray[0]; 
 		String operator = strArray[1];
 		String numStr = strArray[2];
 
-		int num = 0;
+		int var = 0;
+		int num = toNum(numStr);
+		
 		if (map.get(varStr) != null) {
-			num = map.get(varStr);
+			var = map.get(varStr);
 		} else {
 			throw new DemoException("变量：" + varStr + " 未定义");
 		}
 
 		switch (operator) {
 		case "减少":
-			num -= toNum(numStr);
-			map.put(varStr, num);
+			var -= num;
 			break;
 		case "增加":
-			num += toNum(numStr);
-			map.put(varStr, num);
+			var += num;
+			break;
+		case "乘以":
+			var *= num;
+			break;
+		case "除以":
+			if ( num == 0) {
+				System.out.println("除数等于零异常");
+			}else {
+				var /= num;
+			}
+			break;
+		case "模除":
+			var %= num;
 			break;
 		default:
-			throw new IllegalArgumentException("manipulateNum没有对应的判断符号请输入（增加、减少）: " + operator);
+			throw new IllegalArgumentException("manipulateNum没有对应的判断符号请输入（增加、减少、乘以、除以、模除）: " + operator);
 		}
+		
+		map.put(varStr, var);
 	}
-
+	@Test
+	public void testManipulate() {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("钱包", -3);
+		manipulateNum("钱包 模除 十", map);
+		printOut("看看 钱包", map);
+	}
 }
