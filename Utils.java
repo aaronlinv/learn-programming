@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class Utils {
 	public static String numWords = "零一二三四五六七八九十";
-	
+
 	/**
 	 * 调用方法
 	 * @param str
@@ -39,23 +39,6 @@ public class Utils {
 		}
 	}
 
-	@Test
-	public void testCall() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		callFunction("整数 气温 等于 十", map);
-		callFunction("气温 减少 三", map);
-		callFunction("气温 增加 二", map);
-		callFunction("看看 气温", map);
-		callFunction("如果 气温 大于 八 则 看看 “你好，世界” 否则 看看 “冻死我了”", map);
-		//
-		callFunction("整数 钱包 等于 零", map);
-		callFunction("钱包 增加 四", map);
-		callFunction("钱包 减少 一", map);
-		callFunction("看看 钱包 ", map);
-		callFunction("看看 “字符串”", map);
-		callFunction("如果 钱包 大于 二 则 看看 “钱太多了” 否则 看看 “我穷死了”", map);
-	}
-	
 	/**
 	 *  赋值整数变量
 	 * @param array
@@ -77,22 +60,15 @@ public class Utils {
 		if (printStr.contains("“") && printStr.contains("”")) {
 			System.out.println(printStr.replace("“", "").replace("”", ""));
 		} else {
-			System.out.println(toChStr(map.get(printStr)));
+			try {
+				System.out.println(toChStr(map.get(printStr)));
+			}catch (NullPointerException e) {
+				throw new DemoException("变量未定义，请定义变量");
+			}
+			
 		}
 	}
-	@Test
-	public void testPrintOut() {
-		
 
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", 10);
-		Utils.printOut("看看 钱包 ".split(" "), map);
-		Utils.printOut("看看 “字符串” ".split(" "), null);
-
-	}
-	
-	
-	
 	/**
 	 * 三目运算
 	 * @param str
@@ -104,24 +80,15 @@ public class Utils {
 		String statement1 = str.substring(0, str.indexOf("则")).replace("如果", "");
 		String statement2 = str.substring(str.indexOf("则"), str.indexOf("否则")).replace("则", "");
 		String statement3 = str.substring(str.indexOf("否则")).replace("否则", "");
-		
-		
+
 		boolean judge = judgeOperator(statement1, map);
 		// System.out.println(judge);
-		
-		if( judge) {
+
+		if (judge) {
 			callFunction(statement2, map);
-		}else {
+		} else {
 			callFunction(statement3, map);
 		}
-	}
-
-	@Test
-	public void testTernary() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", 10);
-		ternaryOperator("如果 钱包 等于 十 则 看看 “钱太多了” 否则 看看 “我穷死了”", map);
-
 	}
 
 	/**
@@ -164,11 +131,24 @@ public class Utils {
 		}
 	}
 
-	@Test
-	public void testJudge() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", 10);
-		System.out.println(judgeOperator("零 等于 零", map));
+	/**
+	 * 汉字单个转化为单个数字
+	 * @param str
+	 * @return
+	 */
+
+	public static int toSingleNum(String str) {
+		return numWords.indexOf(str);// -1不存在
+	}
+
+	/**
+	 * 单个数字转化为单个汉字
+	 * @param num
+	 * @return
+	 */
+	public static String toSingleChStr(int num) {
+
+		return numWords.substring(num, num + 1);
 	}
 
 	/**
@@ -176,17 +156,103 @@ public class Utils {
 	 * @return
 	 */
 	public static int toNum(String str) {
-		return numWords.indexOf(str);// -1不存在
+		int flag = 1;// 负数标记
+		int var = 0;
+		char[] arr = str.toCharArray();
+		if (arr[0] == '负') {
+			str = str.replace("负", "");
+			
+			flag = -1;
+		}
+		
+		
+		if (str.contains("百")) {
+			var = 100 * toSingleNum(str.substring(0, str.indexOf('百')));// 百位
+			var = flag * var;
+			str = str.substring(str.indexOf('百') + 1);
+			if (str.contains("零")) {
+				var += toSingleNum(str.substring(str.indexOf("零")+1));// 几百零几
+				return var*flag;
+			}
+		}
+
+		if (str.length() == 1 && var >=100) { //判断var 不然十 可能会输出100
+			var += 10*toSingleNum(str); //几百几：九百九
+			return var*flag;
+		}
+		
+		if (str.contains("十")) {
+			if (str.indexOf('十') == 0) {
+				var +=10; // 十几
+			}
+			var += 10 * toSingleNum(str.substring(0,str.indexOf('十')));// 十
+			str = str.substring(str.indexOf('十')+1);
+		}
+		
+		if (str.length() != 0) {
+			var += toSingleNum(str);
+		}
+		
+		return var*flag;
 	}
-	
+
+	@Test
+	public void test2() {
+
+		System.out.println(toNum("一百一十一"));
+	}
+
 	/**
 	 * 数字转化为汉字
 	 * @param num
 	 * @return
 	 */
 	public static String toChStr(int num) {
-		
-		return numWords.substring(num,num+1);
+
+		String varStr = "";
+
+		if (num < 0) {
+			varStr += "负";
+			num = num * -1;
+		}
+		if (num == 0) { // 零
+			return "零";
+		}
+
+		if (num / 10 == 1) { // 用十几 改变一十几的写法
+			varStr += "十";
+			if (num % 10 != 0) {
+				varStr += toSingleChStr(num % 10);
+			}
+			return varStr;
+		}
+
+		if (num / 100 > 0) {
+			varStr += toSingleChStr(num / 100) + "百";
+			if (num % 100 == 0) {// 几百
+				return varStr;
+			} else if (num % 100 < 10) { // 几百零几
+				return varStr += "零" + toSingleChStr(num % 100);
+			}
+		}
+
+		num %= 100;
+		if (num / 10 != 0) {
+			varStr += toSingleChStr(num / 10) + "十";// 十
+		}
+
+		if (num % 10 != 0) {
+			varStr += toSingleChStr(num % 10); // 几
+		}
+
+		return varStr;
+	}
+
+	@Test
+	public void test() {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("钱包", 10);
+		System.out.println(toChStr(-909));
 	}
 
 	/**
@@ -220,13 +286,5 @@ public class Utils {
 			throw new IllegalArgumentException("manipulateNum没有对应的判断符号请输入（增加、减少）: " + operator);
 		}
 	}
-	
 
-	@Test
-	public void testManipulate() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", 10);
-		manipulateNum("钱包 减少 四", map);
-		System.out.println(map.get("钱包"));
-	}
 }
