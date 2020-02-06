@@ -16,8 +16,10 @@ public class Utils {
 	public static void callFunction(String str, Map<String, Integer> map) {
 		String[] split = str.trim().split(" ");
 		String keyword = split[0];
-
-		if (map.get(keyword) != null) {
+		if (keyword.equals("无")) {
+			return;
+		}
+		if (isManipulate(str)  || map.get(split[0])!= null) {
 			Utils.manipulateNum(str, map);
 		} else {
 
@@ -39,7 +41,7 @@ public class Utils {
 				Utils.ternaryOperator(str, map);
 				break;
 			default:
-				throw new IllegalArgumentException("judgeOperator 没有对应的判断符号请输入（整数、看看、如果）: " + keyword);
+				throw new IllegalArgumentException("没有关键字：" + keyword + " 请使用关键字：整数、看看、如果");
 			}
 		}
 	}
@@ -68,7 +70,7 @@ public class Utils {
 			try {
 				System.out.println(toChStr(map.get(printStr)));
 			} catch (NullPointerException e) {
-				throw new DemoException("变量未定义，请定义变量");
+				throw new DemoException("变量：" + printStr + " 未定义，请定义变量");
 			}
 
 		}
@@ -132,7 +134,7 @@ public class Utils {
 			return leftInt < rightInt;
 
 		default:
-			throw new IllegalArgumentException("judgeOperator没有对应的判断符号请输入（大于、等于、小于）: " + middle);
+			throw new IllegalArgumentException("没有关键字："+ middle + " 请使用关键字：大于、等于、小于");
 		}
 	}
 
@@ -233,10 +235,10 @@ public class Utils {
 
 		// 数字机械式的转化
 		if (num > 999) {
-			//1234
-			char []  CharArr = Integer.toString(num).toCharArray();
+			// 1234
+			char[] CharArr = Integer.toString(num).toCharArray();
 			for (char c : CharArr) {
-				String s = ""+c;
+				String s = "" + c;
 				varStr += toSingleChStr(Integer.parseInt(s));
 			}
 			return varStr;
@@ -288,8 +290,13 @@ public class Utils {
 	 */
 	public static void manipulateNum(String str, Map<String, Integer> map) {
 		String[] strArray = str.trim().split(" ");
-		String varStr = strArray[0];
 		String operator = strArray[1];
+		
+		if (strArray.length == 2) {
+			throw new DemoException("缺少 "+operator+" 的参数");
+		}
+		
+		String varStr = strArray[0];
 		String numStr = strArray[2];
 
 		int var = 0;
@@ -298,7 +305,7 @@ public class Utils {
 		if (map.get(varStr) != null) {
 			var = map.get(varStr);
 		} else {
-			throw new DemoException("变量：" + varStr + " 未定义");
+			throw new DemoException("变量：" + varStr + " 未定义，请定义变量");
 		}
 
 		switch (operator) {
@@ -313,7 +320,7 @@ public class Utils {
 			break;
 		case "除以":
 			if (num == 0) {
-				System.out.println("除数等于零异常");
+				throw new DemoException("除数不能等于零哦");
 			} else {
 				var /= num;
 			}
@@ -322,7 +329,7 @@ public class Utils {
 			var %= num;
 			break;
 		default:
-			throw new IllegalArgumentException("manipulateNum没有对应的判断符号请输入（增加、减少、乘以、除以、模除）: " + operator);
+			throw new IllegalArgumentException("没有关键字："+ operator + " 请使用关键字：增加、减少、乘以、除以、模除 " );
 		}
 
 		map.put(varStr, var);
@@ -334,5 +341,32 @@ public class Utils {
 		map.put("钱包", -3);
 		manipulateNum("钱包 模除 十", map);
 		printOut("看看 钱包", map);
+	}
+
+	/**
+	 * 判断是否为运算操作语句（）
+	 * @param str
+	 * @return
+	 */
+	public static boolean isManipulate(String str) {
+		String[] array = str.trim().split(" ");
+
+		String[] keywords = { "增加", "减少", "乘以", "除以", "模除" };
+		if (array.length==1) {
+			throw new DemoException("语法有错，请检查语法");
+		}
+		String symbol = array[1].trim();
+
+		for (String s : keywords) {
+			if (symbol.equals(s)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Test
+	public void testSymbol() {
+		System.out.println(isManipulate("钱包 模除  十"));
 	}
 }

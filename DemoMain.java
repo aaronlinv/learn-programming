@@ -11,7 +11,11 @@ public class DemoMain {
 
 		Scanner sc = new Scanner(System.in);
 		while (true) {
-			Utils.callFunction(sc.nextLine().trim(), map);
+			try {
+				Utils.callFunction(sc.nextLine().trim(), map);
+			}catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
 		}
 	}
 
