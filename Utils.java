@@ -28,7 +28,12 @@ public class Utils {
 				map.put(split[1], num);
 				break;
 			case "看看":
-				Utils.printOut(str, map);
+				if (split.length == 1) {
+					System.out.println();// 仅输入"看看" 输出空行
+
+				} else {
+					Utils.printOut(str, map);
+				}
 				break;
 			case "如果":
 				Utils.ternaryOperator(str, map);
@@ -58,14 +63,14 @@ public class Utils {
 		String[] array = str.trim().split(" ");
 		String printStr = array[1];
 		if (printStr.contains("“") && printStr.contains("”")) {
-			System.out.println(printStr.replace("“", "").replace("”", ""));
+			System.out.println(printStr.replace("“", "").replace("”", "")); // 看看 “字符串”
 		} else {
 			try {
 				System.out.println(toChStr(map.get(printStr)));
-			}catch (NullPointerException e) {
+			} catch (NullPointerException e) {
 				throw new DemoException("变量未定义，请定义变量");
 			}
-			
+
 		}
 	}
 
@@ -161,45 +166,55 @@ public class Utils {
 		char[] arr = str.toCharArray();
 		if (arr[0] == '负') {
 			str = str.replace("负", "");
-			
+
 			flag = -1;
 		}
-		
-		
+		// 数字机械式的转化
+		if (str.length() > 1 && !str.contains("百") && !str.contains("十")) {
+			char[] chArr = str.toCharArray();
+			int temp = 1;
+			for (int i = chArr.length - 1; i >= 0; i--) {
+				String s = "" + chArr[i];
+				var += temp * toSingleNum(s);
+				temp *= 10;
+			}
+			return var * flag;
+		}
+
 		if (str.contains("百")) {
 			var = 100 * toSingleNum(str.substring(0, str.indexOf('百')));// 百位
-			var = flag * var;
 			str = str.substring(str.indexOf('百') + 1);
 			if (str.contains("零")) {
-				var += toSingleNum(str.substring(str.indexOf("零")+1));// 几百零几
-				return var*flag;
+				var += toSingleNum(str.substring(str.indexOf("零") + 1));// 几百零几
+				return var * flag;
 			}
 		}
 
-		if (str.length() == 1 && var >=100) { //判断var 不然十 可能会输出100
-			var += 10*toSingleNum(str); //几百几：九百九
-			return var*flag;
+		if (str.length() == 1 && var >= 100) { // 判断var 不然十 可能会输出100
+			var += 10 * toSingleNum(str); // 几百几：九百九
+			return var * flag;
 		}
-		
+
 		if (str.contains("十")) {
 			if (str.indexOf('十') == 0) {
-				var +=10; // 十几
+				var += 10; // 十几
 			}
-			var += 10 * toSingleNum(str.substring(0,str.indexOf('十')));// 十
-			str = str.substring(str.indexOf('十')+1);
+			var += 10 * toSingleNum(str.substring(0, str.indexOf('十')));// 十
+			str = str.substring(str.indexOf('十') + 1);
 		}
-		
+
 		if (str.length() != 0) {
 			var += toSingleNum(str);
 		}
-		
-		return var*flag;
+
+		return var * flag;
 	}
 
 	@Test
 	public void test2() {
-
-		System.out.println(toNum("一百一十一"));
+		// Java int Max ：2147483647 二一四七四八三六四七 Min：-2147483648
+		// System.out.println(toNum("负二一四七四八三六四八"));
+		System.out.println(toNum("负九九九"));
 	}
 
 	/**
@@ -213,7 +228,18 @@ public class Utils {
 
 		if (num < 0) {
 			varStr += "负";
-			num = num * -1;
+			num = num * -1; // 转化为正数
+		}
+
+		// 数字机械式的转化
+		if (num > 999) {
+			//1234
+			char []  CharArr = Integer.toString(num).toCharArray();
+			for (char c : CharArr) {
+				String s = ""+c;
+				varStr += toSingleChStr(Integer.parseInt(s));
+			}
+			return varStr;
 		}
 		if (num == 0) { // 零
 			return "零";
@@ -252,7 +278,7 @@ public class Utils {
 	public void test() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		map.put("钱包", 10);
-		System.out.println(toChStr(-909));
+		System.out.println(toChStr(9999));
 	}
 
 	/**
@@ -262,13 +288,13 @@ public class Utils {
 	 */
 	public static void manipulateNum(String str, Map<String, Integer> map) {
 		String[] strArray = str.trim().split(" ");
-		String varStr = strArray[0]; 
+		String varStr = strArray[0];
 		String operator = strArray[1];
 		String numStr = strArray[2];
 
 		int var = 0;
 		int num = toNum(numStr);
-		
+
 		if (map.get(varStr) != null) {
 			var = map.get(varStr);
 		} else {
@@ -286,9 +312,9 @@ public class Utils {
 			var *= num;
 			break;
 		case "除以":
-			if ( num == 0) {
+			if (num == 0) {
 				System.out.println("除数等于零异常");
-			}else {
+			} else {
 				var /= num;
 			}
 			break;
@@ -298,9 +324,10 @@ public class Utils {
 		default:
 			throw new IllegalArgumentException("manipulateNum没有对应的判断符号请输入（增加、减少、乘以、除以、模除）: " + operator);
 		}
-		
+
 		map.put(varStr, var);
 	}
+
 	@Test
 	public void testManipulate() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
