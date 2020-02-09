@@ -4,19 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
-
 public class Utils {
-	public static String numWords = "ÁãÒ»¶şÈıËÄÎåÁùÆß°Ë¾ÅÊ®";
+	public static String numWords = "é›¶ä¸€äºŒä¸‰å››äº”å…­ä¸ƒå…«ä¹å";
 
 	/**
-	 * µ÷ÓÃ·½·¨
+	 * è°ƒç”¨æ–¹æ³•
 	 * @param str
 	 * @param map
 	 */
 	public static void callFunction(String str, Map<String, Integer> map) {
 		String[] split = str.trim().split(" ");
 		String keyword = split[0];
-		if (keyword.equals("ÎŞ")) {
+		if (keyword.equals("æ— ")) {
 			return;
 		}
 		if (isManipulate(str)  || map.get(split[0])!= null) {
@@ -24,25 +23,25 @@ public class Utils {
 		} else {
 
 			switch (keyword) {
-			case "ÕûÊı":
-				// System.out.println(map.get("Ç®°ü"));// ²»´æÔÚ·µ»Ønull
+			case "æ•´æ•°":
+				// System.out.println(map.get("é’±åŒ…"));// ä¸å­˜åœ¨è¿”å›null
 				int num = Utils.assignInt(str);
 				map.put(split[1], num);
 				break;
-			case "¿´¿´":
+			case "çœ‹çœ‹":
 					Utils.printOut(str, map);
 				break;
-			case "Èç¹û":
+			case "å¦‚æœ":
 				Utils.ternaryOperator(str, map);
 				break;
 			default:
-				throw new IllegalArgumentException("Ã»ÓĞ¹Ø¼ü×Ö£º" + keyword + " ÇëÊ¹ÓÃ¹Ø¼ü×Ö£ºÕûÊı¡¢¿´¿´¡¢Èç¹û");
+				throw new IllegalArgumentException("æ²¡æœ‰å…³é”®å­—ï¼š" + keyword + " è¯·ä½¿ç”¨å…³é”®å­—ï¼šæ•´æ•°ã€çœ‹çœ‹ã€å¦‚æœ");
 			}
 		}
 	}
 
 	/**
-	 *  ¸³ÖµÕûÊı±äÁ¿
+	 *  èµ‹å€¼æ•´æ•°å˜é‡
 	 * @param array
 	 * @return
 	 */
@@ -52,36 +51,36 @@ public class Utils {
 	}
 
 	/**
-	 * Êä³ö×Ö·û´®»òÕß±äÁ¿
+	 * è¾“å‡ºå­—ç¬¦ä¸²æˆ–è€…å˜é‡
 	 * @param array
 	 * @param map
 	 */
 	public static void printOut(String str, Map<String, Integer> map) {
 		String[] array = str.trim().split(" ");
 		String printStr = array[1];
-		if (printStr.contains("¡°") && printStr.contains("¡±")) {
-			System.out.println(printStr.replace("¡°", "").replace("¡±", "")); // ¿´¿´ ¡°×Ö·û´®¡±
+		if (printStr.contains("â€œ") && printStr.contains("â€")) {
+			System.out.println(printStr.replace("â€œ", "").replace("â€", "")); // çœ‹çœ‹ â€œå­—ç¬¦ä¸²â€
 		} else {
 			try {
 				System.out.println(toChStr(map.get(printStr)));
 			} catch (NullPointerException e) {
-				throw new DemoException("±äÁ¿£º" + printStr + " Î´¶¨Òå£¬Çë¶¨Òå±äÁ¿");
+				throw new DemoException("å˜é‡ï¼š" + printStr + " æœªå®šä¹‰ï¼Œè¯·å®šä¹‰å˜é‡");
 			}
 
 		}
 	}
 
 	/**
-	 * ÈıÄ¿ÔËËã
+	 * ä¸‰ç›®è¿ç®—
 	 * @param str
 	 * @param map
 	 */
 	public static void ternaryOperator(String str, Map<String, Integer> map) {
-		// Èç¹û Ç®°ü ´óÓÚ Ê® Ôò ¿´¿´ ¡°Ç®Ì«¶àÁË¡± ·ñÔò ¿´¿´ ¡°ÎÒÇîËÀÁË¡±
-		// ÏÈ²»¿¼ÂÇÈıÄ¿Ç¶Ì×ÈıÄ¿µÄÇé¿ö
-		String statement1 = str.substring(0, str.indexOf("Ôò")).replace("Èç¹û", "");
-		String statement2 = str.substring(str.indexOf("Ôò"), str.indexOf("·ñÔò")).replace("Ôò", "");
-		String statement3 = str.substring(str.indexOf("·ñÔò")).replace("·ñÔò", "");
+		// å¦‚æœ é’±åŒ… å¤§äº å åˆ™ çœ‹çœ‹ â€œé’±å¤ªå¤šäº†â€ å¦åˆ™ çœ‹çœ‹ â€œæˆ‘ç©·æ­»äº†â€
+		// å…ˆä¸è€ƒè™‘ä¸‰ç›®åµŒå¥—ä¸‰ç›®çš„æƒ…å†µ
+		String statement1 = str.substring(0, str.indexOf("åˆ™")).replace("å¦‚æœ", "");
+		String statement2 = str.substring(str.indexOf("åˆ™"), str.indexOf("å¦åˆ™")).replace("åˆ™", "");
+		String statement3 = str.substring(str.indexOf("å¦åˆ™")).replace("å¦åˆ™", "");
 
 		boolean judge = judgeOperator(statement1, map);
 		// System.out.println(judge);
@@ -94,14 +93,14 @@ public class Utils {
 	}
 
 	/**
-	 * ÅĞ¶ÏÓï¾ä£¬´«ÈëÈç¹ûÓï¾ä ÀıÈç£ºÁã µÈÓÚ Áã
+	 * åˆ¤æ–­è¯­å¥ï¼Œä¼ å…¥å¦‚æœè¯­å¥ ä¾‹å¦‚ï¼šé›¶ ç­‰äº é›¶
 	 * @param str
 	 * @param map
 	 * @return 
 	 */
 	public static boolean judgeOperator(String str, Map<String, Integer> map) {
 
-		String[] strArray = str.trim().split(" ");// ²»È¥³ı×óÓÒ¿Õ¸ñ£¬¿Õ¸ñ»á±»¼ÓÈëµ½·Ö¸îÊı×é
+		String[] strArray = str.trim().split(" ");// ä¸å»é™¤å·¦å³ç©ºæ ¼ï¼Œç©ºæ ¼ä¼šè¢«åŠ å…¥åˆ°åˆ†å‰²æ•°ç»„
 		String leftStr = strArray[0];
 		String rightStr = strArray[2];
 		String middle = strArray[1];
@@ -121,30 +120,30 @@ public class Utils {
 		}
 
 		switch (middle) {
-		case "µÈÓÚ":
+		case "ç­‰äº":
 			return leftInt == rightInt;
-		case "´óÓÚ":
+		case "å¤§äº":
 			return leftInt > rightInt;
-		case "Ğ¡ÓÚ":
+		case "å°äº":
 			return leftInt < rightInt;
 
 		default:
-			throw new IllegalArgumentException("Ã»ÓĞ¹Ø¼ü×Ö£º"+ middle + " ÇëÊ¹ÓÃ¹Ø¼ü×Ö£º´óÓÚ¡¢µÈÓÚ¡¢Ğ¡ÓÚ");
+			throw new IllegalArgumentException("æ²¡æœ‰å…³é”®å­—ï¼š"+ middle + " è¯·ä½¿ç”¨å…³é”®å­—ï¼šå¤§äºã€ç­‰äºã€å°äº");
 		}
 	}
 
 	/**
-	 * ºº×Öµ¥¸ö×ª»¯Îªµ¥¸öÊı×Ö
+	 * æ±‰å­—å•ä¸ªè½¬åŒ–ä¸ºå•ä¸ªæ•°å­—
 	 * @param str
 	 * @return
 	 */
 
 	public static int toSingleNum(String str) {
-		return numWords.indexOf(str);// -1²»´æÔÚ
+		return numWords.indexOf(str);// -1ä¸å­˜åœ¨
 	}
 
 	/**
-	 * µ¥¸öÊı×Ö×ª»¯Îªµ¥¸öºº×Ö
+	 * å•ä¸ªæ•°å­—è½¬åŒ–ä¸ºå•ä¸ªæ±‰å­—
 	 * @param num
 	 * @return
 	 */
@@ -154,20 +153,20 @@ public class Utils {
 	}
 
 	/**
-	 * ºº×Ö×ª»¯ÎªÊı×Ö
+	 * æ±‰å­—è½¬åŒ–ä¸ºæ•°å­—
 	 * @return
 	 */
 	public static int toNum(String str) {
-		int flag = 1;// ¸ºÊı±ê¼Ç
+		int flag = 1;// è´Ÿæ•°æ ‡è®°
 		int var = 0;
 		char[] arr = str.toCharArray();
-		if (arr[0] == '¸º') {
-			str = str.replace("¸º", "");
+		if (arr[0] == 'è´Ÿ') {
+			str = str.replace("è´Ÿ", "");
 
 			flag = -1;
 		}
-		// Êı×Ö»úĞµÊ½µÄ×ª»¯
-		if (str.length() > 1 && !str.contains("°Ù") && !str.contains("Ê®")) {
+		// æ•°å­—æœºæ¢°å¼çš„è½¬åŒ–
+		if (str.length() > 1 && !str.contains("ç™¾") && !str.contains("å")) {
 			char[] chArr = str.toCharArray();
 			int temp = 1;
 			for (int i = chArr.length - 1; i >= 0; i--) {
@@ -178,26 +177,26 @@ public class Utils {
 			return var * flag;
 		}
 
-		if (str.contains("°Ù")) {
-			var = 100 * toSingleNum(str.substring(0, str.indexOf('°Ù')));// °ÙÎ»
-			str = str.substring(str.indexOf('°Ù') + 1);
-			if (str.contains("Áã")) {
-				var += toSingleNum(str.substring(str.indexOf("Áã") + 1));// ¼¸°ÙÁã¼¸
+		if (str.contains("ç™¾")) {
+			var = 100 * toSingleNum(str.substring(0, str.indexOf('ç™¾')));// ç™¾ä½
+			str = str.substring(str.indexOf('ç™¾') + 1);
+			if (str.contains("é›¶")) {
+				var += toSingleNum(str.substring(str.indexOf("é›¶") + 1));// å‡ ç™¾é›¶å‡ 
 				return var * flag;
 			}
 		}
 
-		if (str.length() == 1 && var >= 100) { // ÅĞ¶Ïvar ²»È»Ê® ¿ÉÄÜ»áÊä³ö100
-			var += 10 * toSingleNum(str); // ¼¸°Ù¼¸£º¾Å°Ù¾Å
+		if (str.length() == 1 && var >= 100) { // åˆ¤æ–­var ä¸ç„¶å å¯èƒ½ä¼šè¾“å‡º100
+			var += 10 * toSingleNum(str); // å‡ ç™¾å‡ ï¼šä¹ç™¾ä¹
 			return var * flag;
 		}
 
-		if (str.contains("Ê®")) {
-			if (str.indexOf('Ê®') == 0) {
-				var += 10; // Ê®¼¸
+		if (str.contains("å")) {
+			if (str.indexOf('å') == 0) {
+				var += 10; // åå‡ 
 			}
-			var += 10 * toSingleNum(str.substring(0, str.indexOf('Ê®')));// Ê®
-			str = str.substring(str.indexOf('Ê®') + 1);
+			var += 10 * toSingleNum(str.substring(0, str.indexOf('å')));// å
+			str = str.substring(str.indexOf('å') + 1);
 		}
 
 		if (str.length() != 0) {
@@ -209,26 +208,29 @@ public class Utils {
 
 	@Test
 	public void test2() {
-		// Java int Max £º2147483647 ¶şÒ»ËÄÆßËÄ°ËÈıÁùËÄÆß Min£º-2147483648
-		// System.out.println(toNum("¸º¶şÒ»ËÄÆßËÄ°ËÈıÁùËÄ°Ë"));
-		System.out.println(toNum("¸º¾Å¾Å¾Å"));
+		// Java int Max ï¼š2147483647 äºŒä¸€å››ä¸ƒå››å…«ä¸‰å…­å››ä¸ƒ Minï¼š-2147483648
+		// System.out.println(toNum("è´ŸäºŒä¸€å››ä¸ƒå››å…«ä¸‰å…­å››å…«"));
+		System.out.println(toNum("è´Ÿä¹ä¹ä¹"));
 	}
 
 	/**
-	 * Êı×Ö×ª»¯Îªºº×Ö
+	 * æ•°å­—è½¬åŒ–ä¸ºæ±‰å­—
 	 * @param num
 	 * @return
 	 */
 	public static String toChStr(int num) {
-
+		
+		if (num == -2147483648) {
+			throw new DemoException("è¶…å‡ºæ”¯æŒçš„è¾“å…¥è¾“å‡ºèŒƒå›´(-2147483647åˆ°2147483647)");
+		}
 		String varStr = "";
 
 		if (num < 0) {
-			varStr += "¸º";
-			num = num * -1; // ×ª»¯ÎªÕıÊı
+			varStr += "è´Ÿ";
+			num = num * -1; // è½¬åŒ–ä¸ºæ­£æ•°
 		}
 
-		// Êı×Ö»úĞµÊ½µÄ×ª»¯
+		// æ•°å­—æœºæ¢°å¼çš„è½¬åŒ–
 		if (num > 999) {
 			// 1234
 			char[] CharArr = Integer.toString(num).toCharArray();
@@ -238,12 +240,12 @@ public class Utils {
 			}
 			return varStr;
 		}
-		if (num == 0) { // Áã
-			return "Áã";
+		if (num == 0) { // é›¶
+			return "é›¶";
 		}
 
-		if (num / 10 == 1) { // ÓÃÊ®¼¸ ¸Ä±äÒ»Ê®¼¸µÄĞ´·¨
-			varStr += "Ê®";
+		if (num / 10 == 1) { // ç”¨åå‡  æ”¹å˜ä¸€åå‡ çš„å†™æ³•
+			varStr += "å";
 			if (num % 10 != 0) {
 				varStr += toSingleChStr(num % 10);
 			}
@@ -251,35 +253,35 @@ public class Utils {
 		}
 
 		if (num / 100 > 0) {
-			varStr += toSingleChStr(num / 100) + "°Ù";
-			if (num % 100 == 0) {// ¼¸°Ù
+			varStr += toSingleChStr(num / 100) + "ç™¾";
+			if (num % 100 == 0) {// å‡ ç™¾
 				return varStr;
-			} else if (num % 100 < 10) { // ¼¸°ÙÁã¼¸
-				return varStr += "Áã" + toSingleChStr(num % 100);
+			} else if (num % 100 < 10) { // å‡ ç™¾é›¶å‡ 
+				return varStr += "é›¶" + toSingleChStr(num % 100);
 			}
 		}
 
 		num %= 100;
 		if (num / 10 != 0) {
-			varStr += toSingleChStr(num / 10) + "Ê®";// Ê®
+			varStr += toSingleChStr(num / 10) + "å";// å
 		}
 
 		if (num % 10 != 0) {
-			varStr += toSingleChStr(num % 10); // ¼¸
+			varStr += toSingleChStr(num % 10); // å‡ 
 		}
 
 		return varStr;
 	}
-
+	
 	@Test
 	public void test() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("Ç®°ü", 10);
+		map.put("é’±åŒ…", 10);
 		System.out.println(toChStr(9999));
 	}
 
 	/**
-	 * ÔËËã²Ù×÷
+	 * è¿ç®—æ“ä½œ
 	 * @param str
 	 * @param map
 	 */
@@ -288,7 +290,7 @@ public class Utils {
 		String operator = strArray[1];
 		
 		if (strArray.length == 2) {
-			throw new DemoException("È±ÉÙ "+operator+" µÄ²ÎÊı");
+			throw new DemoException("ç¼ºå°‘ "+operator+" çš„å‚æ•°");
 		}
 		
 		String varStr = strArray[0];
@@ -300,31 +302,31 @@ public class Utils {
 		if (map.get(varStr) != null) {
 			var = map.get(varStr);
 		} else {
-			throw new DemoException("±äÁ¿£º" + varStr + " Î´¶¨Òå£¬Çë¶¨Òå±äÁ¿");
+			throw new DemoException("å˜é‡ï¼š" + varStr + " æœªå®šä¹‰ï¼Œè¯·å®šä¹‰å˜é‡");
 		}
 
 		switch (operator) {
-		case "¼õÉÙ":
+		case "å‡å°‘":
 			var -= num;
 			break;
-		case "Ôö¼Ó":
+		case "å¢åŠ ":
 			var += num;
 			break;
-		case "³ËÒÔ":
+		case "ä¹˜ä»¥":
 			var *= num;
 			break;
-		case "³ıÒÔ":
+		case "é™¤ä»¥":
 			if (num == 0) {
-				throw new DemoException("³ıÊı²»ÄÜµÈÓÚÁãÅ¶");
+				throw new DemoException("é™¤æ•°ä¸èƒ½ç­‰äºé›¶å“¦");
 			} else {
 				var /= num;
 			}
 			break;
-		case "Ä£³ı":
+		case "æ¨¡é™¤":
 			var %= num;
 			break;
 		default:
-			throw new IllegalArgumentException("Ã»ÓĞ¹Ø¼ü×Ö£º"+ operator + " ÇëÊ¹ÓÃ¹Ø¼ü×Ö£ºÔö¼Ó¡¢¼õÉÙ¡¢³ËÒÔ¡¢³ıÒÔ¡¢Ä£³ı " );
+			throw new IllegalArgumentException("æ²¡æœ‰å…³é”®å­—ï¼š"+ operator + " è¯·ä½¿ç”¨å…³é”®å­—ï¼šå¢åŠ ã€å‡å°‘ã€ä¹˜ä»¥ã€é™¤ä»¥ã€æ¨¡é™¤ " );
 		}
 
 		map.put(varStr, var);
@@ -333,22 +335,22 @@ public class Utils {
 	@Test
 	public void testManipulate() {
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("Ç®°ü", -3);
-		manipulateNum("Ç®°ü Ä£³ı Ê®", map);
-		printOut("¿´¿´ Ç®°ü", map);
+		map.put("é’±åŒ…", -3);
+		manipulateNum("é’±åŒ… æ¨¡é™¤ å", map);
+		printOut("çœ‹çœ‹ é’±åŒ…", map);
 	}
 
 	/**
-	 * ÅĞ¶ÏÊÇ·ñÎªÔËËã²Ù×÷Óï¾ä£¨£©
+	 * åˆ¤æ–­æ˜¯å¦ä¸ºè¿ç®—æ“ä½œè¯­å¥ï¼ˆï¼‰
 	 * @param str
 	 * @return
 	 */
 	public static boolean isManipulate(String str) {
 		String[] array = str.trim().split(" ");
 
-		String[] keywords = { "Ôö¼Ó", "¼õÉÙ", "³ËÒÔ", "³ıÒÔ", "Ä£³ı" };
+		String[] keywords = { "å¢åŠ ", "å‡å°‘", "ä¹˜ä»¥", "é™¤ä»¥", "æ¨¡é™¤" };
 		if (array.length==1) {
-			throw new DemoException("Óï·¨ÓĞ´í£¬Çë¼ì²éÓï·¨");
+			throw new DemoException("è¯­æ³•æœ‰é”™ï¼Œè¯·æ£€æŸ¥è¯­æ³•");
 		}
 		String symbol = array[1].trim();
 
@@ -362,6 +364,6 @@ public class Utils {
 
 	@Test
 	public void testSymbol() {
-		System.out.println(isManipulate("Ç®°ü Ä£³ı  Ê®"));
+		System.out.println(isManipulate("é’±åŒ… æ¨¡é™¤  å"));
 	}
 }
