@@ -22,12 +22,14 @@ public class Test {
 		while ((str = in.readLine()) != null) {
 			if (str.equals("")) {
 				System.out.println();
-			}else if(str.substring(0,1).equals("-")) {
-				System.out.println("---->"+str.substring(1));
-			}else {
+			}else if(str.substring(0,1).equals("*")) {
+				System.out.println("正确输出---->"+str.substring(1));
+			}else if(str.substring(0,1).equals("-")){
+				System.out.println("####   "+str.substring(1)+"    ####");
+			}else{
 				System.err.println(i + ":" + str);
 				try {
-					Utils.callFunction(DemoMain.removeSpaces(str), map);
+					Utils.callFunction(str, map);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}
