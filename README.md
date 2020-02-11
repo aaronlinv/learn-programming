@@ -1,3 +1,10 @@
+## 工程介绍
+- DemoMain 存放主函数（处理传入的字符串，分割成行）
+- Utils 字符处理的工具类
+- DemoException （Demo的异常处理）
+- Test 用于测试程序，读取testFile.txt，测试程序的执行情况
+- testFile.txt 测试文本，存放用于测试的语句(放在src目录下)
+
 ## 编程要求
 请编写一个程序，满足以下语法要求：
 
