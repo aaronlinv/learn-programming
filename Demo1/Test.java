@@ -3,8 +3,6 @@ package Demo1;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 用于测试程序
@@ -14,8 +12,6 @@ import java.util.Map;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-
 		BufferedReader in = new BufferedReader(new FileReader("testFile.txt"));
 		String str;
 		int i = 1;
@@ -29,7 +25,7 @@ public class Test {
 			}else{
 				System.err.println(i + ":" + str);
 				try {
-					Utils.callFunction(str, map);
+					Utils.callFunction(str);
 				} catch (Exception e) {
 					System.out.println(e.getMessage());
 				}

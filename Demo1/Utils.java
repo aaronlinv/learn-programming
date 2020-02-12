@@ -6,33 +6,33 @@ import java.util.Map;
 import org.junit.Test;
 
 public class Utils {
-	public static String numWords = "零一二三四五六七八九十";
+	private static String numWords = "零一二三四五六七八九十";
+	private static Map<String, Integer> map = new HashMap<String, Integer>();
 
 	/**
 	 * 调用方法
 	 * @param str
-	 * @param map
 	 */
-	public static void callFunction(String str, Map<String, Integer> map) {
+	public static void callFunction(String str) {
 		String[] split = str.trim().split("\\s+");
 		String keyword = split[0];
 		if (keyword.equals("无")) {
 			return;
 		}
-		if (isManipulate(str) || map.get(split[0]) != null) {
-			Utils.manipulateNum(str, map);
+		if (isManipulate(str) || isVar(keyword)) {
+			Utils.manipulateNum(str);
 		} else {
 			// isManipulate 已经判断了len == 1情况 不会越界
 			switch (keyword) {
 			case "整数":
 				// System.out.println(map.get("钱包"));// 不存在返回null
-				Utils.assignInt(str, map);
+				Utils.assignInt(str);
 				break;
 			case "看看":
-				Utils.printOut(str, map);
+				Utils.printOut(str);
 				break;
 			case "如果":
-				Utils.ternaryOperator(str, map);
+				Utils.ternaryOperator(str);
 				break;
 			default:
 				throw new IllegalArgumentException("没有关键字：" + keyword + " 请使用关键字：整数、看看、如果");
@@ -45,21 +45,21 @@ public class Utils {
 	 * @param array
 	 * @return
 	 */
-	public static void assignInt(String str, Map<String, Integer> map) {
+	public static void assignInt(String str) {
 		String[] strArr = str.trim().split("\\s+");
 		// 短路 所以不会越界
 		if (strArr.length != 4 || !strArr[2].equals("等于")) {
 			throw new DemoException("语法有错，请检查语法");
 		}
-		map.put(strArr[1], toNum(strArr[3]));
+
+		setVar(strArr[1], toNum(strArr[3]));
 	}
 
 	/**
 	 * 输出字符串或者变量
 	 * @param array
-	 * @param map
 	 */
-	public static void printOut(String str, Map<String, Integer> map) {
+	public static void printOut(String str) {
 		String[] strArr = str.trim().split("\\s+");
 		if (strArr.length != 2) {
 			throw new DemoException("语法有错，请检查语法");
@@ -68,39 +68,37 @@ public class Utils {
 		if (printStr.contains("“") && printStr.contains("”")) {
 			System.out.println(printStr.replace("“", "").replace("”", "")); // 看看 “字符串”
 		} else {
-			System.out.println(toChStr(getVar(printStr, map)));
+			System.out.println(toChStr(getVar(printStr)));
 		}
 	}
 
 	/**
 	 * 三目运算
 	 * @param str
-	 * @param map
 	 */
-	public static void ternaryOperator(String str, Map<String, Integer> map) {
+	public static void ternaryOperator(String str) {
 		// 如果 钱包 大于 十 则 看看 “钱太多了” 否则 看看 “我穷死了”
 		// 先不考虑三目嵌套三目的情况
 		String statement1 = str.substring(0, str.indexOf("则")).replace("如果", "");
 		String statement2 = str.substring(str.indexOf("则"), str.indexOf("否则")).replace("则", "");
 		String statement3 = str.substring(str.indexOf("否则")).replace("否则", "");
 
-		boolean judge = judgeOperator(statement1, map);
+		boolean judge = judgeOperator(statement1);
 		// System.out.println(judge);
 
 		if (judge) {
-			callFunction(statement2, map);
+			callFunction(statement2);
 		} else {
-			callFunction(statement3, map);
+			callFunction(statement3);
 		}
 	}
 
 	/**
 	 * 判断语句，传入如果语句 例如：零 等于 零
 	 * @param str
-	 * @param map
 	 * @return 
 	 */
-	public static boolean judgeOperator(String str, Map<String, Integer> map) {
+	public static boolean judgeOperator(String str) {
 		String[] strArr = str.trim().split("\\s+");// 不去除左右空格，空格会被加入到分割数组
 		if (strArr.length != 3) {
 			throw new DemoException("语法有错，请检查语法");
@@ -112,8 +110,8 @@ public class Utils {
 		int rightInt = 0;
 
 		// 如果都不是变量，那么toNum来异常处理
-		if (map.get(leftStr) != null) {
-			leftInt = map.get(leftStr);
+		if (isVar(leftStr)) {
+			leftInt = getVar(leftStr);
 		} else {
 			try {
 				leftInt = toNum(leftStr);
@@ -122,8 +120,8 @@ public class Utils {
 			}
 		}
 
-		if (map.get(rightStr) != null) {
-			rightInt = map.get(rightStr);
+		if (isVar(rightStr)) {
+			rightInt = getVar(rightStr);
 		} else {
 			try {
 				rightInt = toNum(rightStr);
@@ -293,19 +291,11 @@ public class Utils {
 		return varStr;
 	}
 
-	@Test
-	public void test() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", 10);
-		System.out.println(toChStr(9999));
-	}
-
 	/**
 	 * 运算操作
 	 * @param str
-	 * @param map
 	 */
-	public static void manipulateNum(String str, Map<String, Integer> map) {
+	public static void manipulateNum(String str) {
 		String[] strArray = str.trim().split("\\s+");
 		if (strArray.length != 3) {
 			throw new DemoException("语法有错，请检查语法");
@@ -315,7 +305,7 @@ public class Utils {
 		String varStr = strArray[0];
 		String numStr = strArray[2];
 
-		int var = getVar(varStr, map);
+		int var = getVar(varStr);
 		int num = toNum(numStr);
 
 		switch (operator) {
@@ -342,19 +332,11 @@ public class Utils {
 			throw new IllegalArgumentException("没有关键字：" + operator + " 请使用关键字：增加、减少、乘以、除以、模除 ");
 		}
 
-		map.put(varStr, var);
-	}
-
-	@Test
-	public void testManipulate() {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		map.put("钱包", -3);
-		manipulateNum("钱包 模除 十", map);
-		printOut("看看 钱包", map);
+		setVar(varStr, var);
 	}
 
 	/**
-	 * 判断是否为运算操作语句（）
+	 * 判断是否为运算操作语句
 	 * @param str
 	 * @return
 	 */
@@ -385,14 +367,31 @@ public class Utils {
 	/**
 	 * 从Map中获取变量，不存在抛出异常
 	 * @param str 需要获取数据的变量名
-	 * @param map 
 	 * @return
 	 */
-	public static int getVar(String varStr, Map<String, Integer> map) {
-		if (map.get(varStr) != null) {
+	private static int getVar(String varStr) {
+		if (isVar(varStr)) {
 			return map.get(varStr);
 		} else {
 			throw new DemoException("变量：" + varStr + " 未定义，请定义变量");
 		}
+	}
+
+	/**
+	 * 存入变量到map中
+	 * @param varStr 键
+	 * @param var 值
+	 */
+	private static void setVar(String varStr, int var) {
+		map.put(varStr, var);
+	}
+
+	/**
+	 * 判断是否为已存在的变量
+	 * @param varStr 键
+	 * @return
+	 */
+	private static boolean isVar(String varStr) {
+		return map.get(varStr) != null ? true : false;
 	}
 }
