@@ -10,6 +10,18 @@ public class Utils {
 	private static Map<String, Integer> map = new HashMap<String, Integer>();
 
 	/**
+	 * 运行语句并处理异常
+	 * @param str
+	 */
+	public static void runMain(String str) {
+		try {
+			Utils.callFunction(str);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
 	 * 调用方法
 	 * @param str
 	 */
@@ -79,9 +91,16 @@ public class Utils {
 	public static void ternaryOperator(String str) {
 		// 如果 钱包 大于 十 则 看看 “钱太多了” 否则 看看 “我穷死了”
 		// 先不考虑三目嵌套三目的情况
-		String statement1 = str.substring(0, str.indexOf("则")).replace("如果", "");
-		String statement2 = str.substring(str.indexOf("则"), str.indexOf("否则")).replace("则", "");
-		String statement3 = str.substring(str.indexOf("否则")).replace("否则", "");
+		String statement1 = null;
+		String statement2 = null;
+		String statement3 = null;
+		try {
+			statement1 = str.substring(0, str.indexOf("则")).replace("如果", "");
+			statement2 = str.substring(str.indexOf("则"), str.indexOf("否则")).replace("则", "");
+			statement3 = str.substring(str.indexOf("否则")).replace("否则", "");
+		} catch (Exception e) {
+			throw new DemoException("语法有错，请检查语法");
+		}
 
 		boolean judge = judgeOperator(statement1);
 		// System.out.println(judge);
