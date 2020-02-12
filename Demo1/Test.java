@@ -24,11 +24,7 @@ public class Test {
 				System.out.println("####   " + str.substring(1) + "    ####");
 			} else {
 				System.err.println(i + ":" + str);
-				try {
-					Utils.callFunction(str);
-				} catch (Exception e) {
-					System.out.println(e.getMessage());
-				}
+				Utils.runMain(str);
 				i++;
 			}
 
