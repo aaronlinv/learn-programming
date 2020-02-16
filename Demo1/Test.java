@@ -21,7 +21,9 @@ public class Test {
 			} else if (str.substring(0, 1).equals("*")) {
 				System.out.println("正确输出---->" + str.substring(1));
 			} else if (str.substring(0, 1).equals("-")) {
-				System.out.println("####   " + str.substring(1) + "    ####");
+				System.out.println("【   " + str.substring(1) + "    】");
+			} else if (str.substring(0, 1).equals("#")) {
+				System.err.println("####异常处理");
 			} else {
 				System.err.println(i + ":" + str);
 				Utils.runMain(str);

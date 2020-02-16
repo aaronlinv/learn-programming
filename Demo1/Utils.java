@@ -73,16 +73,38 @@ public class Utils {
 	 */
 	public static void printOut(String str) {
 		String[] strArr = str.trim().split("\\s+");
-		if (strArr.length != 2) {
+
+		// 输出变量
+		if (strArr.length == 2) {
+			String varStr = strArr[1];
+			if (isVar(varStr)) {
+				System.out.println(toChStr(getVar(varStr)));
+				return;
+			} else if (!varStr.contains("“") && !varStr.contains("”")) {
+				throw new DemoException("变量：" + varStr + " 未定义，请定义变量");
+			}
+			
+		}
+		// 去除字符串中的“看看”
+		String newStr = str.trim().substring(2).trim();		
+	
+		if (newStr.indexOf("“") == 0 && newStr.lastIndexOf("”") == (newStr.length() - 1)) {
+			System.out.println(newStr.substring(1, ( newStr.length()-1)  ));
+		} else {
 			throw new DemoException("语法有错，请检查语法");
 		}
-		String printStr = strArr[1];
-		if (printStr.contains("“") && printStr.contains("”")) {
-			System.out.println(printStr.replace("“", "").replace("”", "")); // 看看 “字符串”
-		} else {
-			System.out.println(toChStr(getVar(printStr)));
-		}
+
+//		if (strArr.length != 2) {
+//			throw new DemoException("语法有错，请检查语法");
+//		}
+//		String printStr = strArr[1];
+//		if (printStr.contains("“") && printStr.contains("”")) {
+//			System.out.println(printStr.replace("“", "").replace("”", "")); // 看看 “字符串”
+//		} else {
+//			System.out.println(toChStr(getVar(printStr)));
+//		}
 	}
+
 
 	/**
 	 * 三目运算
@@ -201,6 +223,9 @@ public class Utils {
 			str = str.replace("负", "");
 
 			flag = -1;
+		}
+		if (str.length() == 1 &&str.equals("百")) {
+			return flag*100;
 		}
 		// 数字机械式的转化
 		if (str.length() > 1 && !str.contains("百") && !str.contains("十")) {
